@@ -19,11 +19,16 @@ class Jwt_Factory
 
     private $headers = array('typ'=> 'JWT', 'alg' => 'none');
 
-    public function __construct(Jwt_Interface_Encode $encode, Jwt_Interface_ClaimFactory $claimFactory, Jwt_Interface_Config $config, Jwt_Interface_Signer $signer = null){
+    public function __construct(Jwt_Interface_Encode $encode, Jwt_Interface_ClaimFactory $claimFactory, Jwt_Interface_Config $config, Jwt_Interface_Signer $signer){
         $this->config = $config;
         $this->encoder = $encode;
         $this->claimFactory = $claimFactory;
         $this->signer = $signer;
+    }
+
+    public static function register($secretKey = '', $claims = array()){
+        $self =  new self(new Jwt_Parsing_Encoder(),new Jwt_Claim_Factory(),new Jwt_Config_Default($secretKey, 'baidu.com', 'ccapp', time(), 0, time() + 3600, 1), new Jwt_Signer_Hmac_Sha256());
+        return $self->issuedBy()->audienceFor()->canOnlyBeUsedAfter()->expiresAt()->identifiedBy()->withMultiClaim($claims);
     }
 
     /**
@@ -84,7 +89,15 @@ class Jwt_Factory
         return $this;
     }
 
-    public function getToken(){
+    public function withMultiClaim($claims = array())
+    {
+        foreach ($claims as $name => $value){
+            $this->claims[(string) $name] = $this->claimFactory->create($name, $value);
+        }
+        return $this;
+    }
+
+    public function token(){
         $this->signer->modifyHeader($this->headers);
         $payload = array(
             $this->encoder->base64UrlEncode($this->headers),
@@ -96,16 +109,13 @@ class Jwt_Factory
         if ($signature !== null){
             $payload[] = $this->encoder->base64UrlEncode($signature);
         }
-
         return new Jwt_Token($this->headers, $this->claims, $signature, $payload);
-
     }
 
     public function createSignature(array $payload){
         if ($this->signer === null || $this->config->getSecretKey() === null){
             return null;
         }
-
         return $this->signer->sign(implode('.', $payload), $this->config->getSecretKey());
     }
 

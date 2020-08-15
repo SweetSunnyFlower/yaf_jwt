@@ -4,7 +4,7 @@ interface Jwt_Interface_Signer
 {
     public function getAlgorithmId();
 
-    public function modifyHeader(array $headers);
+    public function modifyHeader(array &$headers);
 
     public function sign($payload, $key);
 

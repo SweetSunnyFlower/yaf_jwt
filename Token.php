@@ -1,10 +1,5 @@
 <?php
 
-use Lcobucci\JWT\Claim;
-use Lcobucci\JWT\Claim\Validatable;
-use Lcobucci\JWT\Signer;
-use Lcobucci\JWT\ValidationData;
-
 class Jwt_Token
 {
     private $headers;
@@ -135,14 +130,23 @@ class Jwt_Token
         }
     }
 
-    public function __toString()
+    public function getToken()
     {
-        $data = implode('.', $this->payload);
+        $token = implode('.', $this->payload);
 
         if ($this->signature === null) {
-            $data .= '.';
+            $token .= '.';
         }
+        return $token;
+    }
 
-        return $data;
+    public function __toString()
+    {
+        $token = implode('.', $this->payload);
+
+        if ($this->signature === null) {
+            $token .= '.';
+        }
+        return $token;
     }
 }

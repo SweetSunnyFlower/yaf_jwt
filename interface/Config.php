@@ -18,19 +18,19 @@ interface Jwt_Interface_Config
      * @desc 设置签发时间
      * @return $this
      */
-    public function setIssuedAt(int $issuedAt = null);
+    public function setIssuedAt($issuedAt = 0);
 
     /**
      * @desc 设置生效时间，在此之前是无效的
      * @return $this
      */
-    public function setEffectAt(int $effectAt = 0);
+    public function setEffectAt($effectAt = 0);
 
     /**
      * @desc 设置过期时间
      * @return $this
      */
-    public function setExpiresAt(int $expiresAt);
+    public function setExpiresAt($expiresAt = 0);
 
     /**
      * @desc 设置签发字段

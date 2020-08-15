@@ -45,12 +45,12 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $secretKey
      * @param null $issued
      * @param null $audience
-     * @param null $issuedAt
-     * @param null $effectAt
-     * @param null $expiresAt
+     * @param int $issuedAt
+     * @param int $effectAt
+     * @param int $expiresAt
      * @param null $identifiedBy
      */
-    public function __construct($secretKey, $issued = null, $audience = null, $issuedAt = null, $effectAt = null, $expiresAt = null, $identifiedBy = null){
+    public function __construct($secretKey, $issued = null, $audience = null, $issuedAt = 0, $effectAt = 0, $expiresAt = 0, $identifiedBy = null){
         $this->setSecretKey($secretKey)
             ->setIssued($issued)
             ->setAudience($audience)
@@ -85,7 +85,7 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $issuedAt
      * @return $this
      */
-    public function setIssuedAt(int $issuedAt = null){
+    public function setIssuedAt($issuedAt = 0){
         $this->issuedAt = $issuedAt ? $issuedAt : time();
         return $this;
     }
@@ -95,7 +95,7 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $effectAt
      * @return $this
      */
-    public function setEffectAt(int $effectAt = 0){
+    public function setEffectAt($effectAt = 0){
         $this->effectAt = $effectAt;
         return $this;
     }
@@ -105,7 +105,7 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param int $expiresAt
      * @return $this
      */
-    public function setExpiresAt(int $expiresAt){
+    public function setExpiresAt($expiresAt = 0){
         $this->expiresAt = $expiresAt;
         return $this;
     }

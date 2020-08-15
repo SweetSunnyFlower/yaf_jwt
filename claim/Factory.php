@@ -9,13 +9,13 @@ class Jwt_Claim_Factory implements Jwt_Interface_ClaimFactory
     {
         $this->callbacks = array_merge(
             array(
-                'iat' => 'Jwt_Claim_CreateLesserOrEqualsTo',
-                'nbf' => 'Jwt_Claim_CreateLesserOrEqualsTo',
-                'exp' => 'Jwt_Claim_CreateGreaterOrEqualsTo',
-                'iss' => 'Jwt_Claim_CreateEqualsTo',
-                'aud' => 'Jwt_Claim_CreateEqualsTo',
-                'sub' => 'Jwt_Claim_CreateEqualsTo',
-                'jti' => 'Jwt_Claim_CreateEqualsTo',
+                'iat' => 'Jwt_Claim_LesserOrEqualsTo',
+                'nbf' => 'Jwt_Claim_LesserOrEqualsTo',
+                'exp' => 'Jwt_Claim_GreaterOrEqualsTo',
+                'iss' => 'Jwt_Claim_EqualsTo',
+                'aud' => 'Jwt_Claim_EqualsTo',
+                'sub' => 'Jwt_Claim_EqualsTo',
+                'jti' => 'Jwt_Claim_EqualsTo',
             ),
             $callbacks
         );
