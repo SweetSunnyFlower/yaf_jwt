@@ -20,7 +20,7 @@ abstract class Jwt_Signer_BaseSigner implements Jwt_Interface_Signer
      */
     public function sign($payload, $key)
     {
-        return new Jwt_Signer_Signature($this->createHash($payload, $this->getKey($key)));
+        return (new Jwt_Signer_Signature($this->createHash($payload, $this->getKey($key))));
     }
 
     /**

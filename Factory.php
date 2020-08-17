@@ -99,13 +99,13 @@ class Jwt_Factory
 
     public function token(){
         $this->signer->modifyHeader($this->headers);
+
         $payload = array(
-            $this->encoder->base64UrlEncode($this->headers),
-            $this->encoder->base64UrlEncode($this->claims),
+            $this->encoder->base64UrlEncode($this->encoder->jsonEncode($this->headers)),
+            $this->encoder->base64UrlEncode($this->encoder->jsonEncode($this->claims)),
         );
 
         $signature = $this->createSignature($payload);
-
         if ($signature !== null){
             $payload[] = $this->encoder->base64UrlEncode($signature);
         }

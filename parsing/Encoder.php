@@ -3,6 +3,7 @@
 class Jwt_Parsing_Encoder implements Jwt_Interface_Encode
 {
     public function jsonEncode($source){
+
         $json = json_encode($source);
 
         if (json_last_error() != JSON_ERROR_NONE){
@@ -13,6 +14,6 @@ class Jwt_Parsing_Encoder implements Jwt_Interface_Encode
     }
 
     public function base64UrlEncode($source){
-        return str_replace('=', '', strtr(base64_encode($this->jsonEncode($source)), '+/', '-_'));
+        return str_replace('=', '', strtr(base64_encode($source), '+/', '-_'));
     }
 }
