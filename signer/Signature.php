@@ -13,6 +13,10 @@ class Jwt_Signer_Signature
         return $signer->verify($this->hash, $payload, $key);
     }
 
+    public function signature(){
+        return $this->hash;
+    }
+
     public function __toString(){
         return $this->hash;
     }
