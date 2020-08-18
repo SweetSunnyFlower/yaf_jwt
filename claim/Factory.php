@@ -24,9 +24,9 @@ class Jwt_Claim_Factory implements Jwt_Interface_ClaimFactory
     public function create($name, $value)
     {
         if (!empty($this->callbacks[$name])){
-            return new $this->callbacks[$name]($name, $value);
+            return (new $this->callbacks[$name]($name, $value))->getValue();
         }
 
-        return new Jwt_Claim_Basic($name, $value);
+        return (new Jwt_Claim_Basic($name, $value))->getValue();
     }
 }

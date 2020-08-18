@@ -99,7 +99,6 @@ class Jwt_Factory
 
     public function token(){
         $this->signer->modifyHeader($this->headers);
-
         $payload = array(
             $this->encoder->base64UrlEncode($this->encoder->jsonEncode($this->headers)),
             $this->encoder->base64UrlEncode($this->encoder->jsonEncode($this->claims)),
@@ -109,6 +108,7 @@ class Jwt_Factory
         if ($signature !== null){
             $payload[] = $this->encoder->base64UrlEncode($signature);
         }
+
         return new Jwt_Token($this->headers, $this->claims, $signature, $payload);
     }
 
@@ -116,6 +116,7 @@ class Jwt_Factory
         if ($this->signer === null || $this->config->getSecretKey() === null){
             return null;
         }
+
         return $this->signer->sign(implode('.', $payload), $this->config->getSecretKey());
     }
 

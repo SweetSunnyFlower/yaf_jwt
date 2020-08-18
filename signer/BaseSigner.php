@@ -41,7 +41,6 @@ abstract class Jwt_Signer_BaseSigner implements Jwt_Interface_Signer
         if (is_string($key)) {
             $key = new Jwt_Signer_Key($key);
         }
-
         return $key;
     }
 

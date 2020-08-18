@@ -133,8 +133,9 @@ class Jwt_Token
     public function getToken()
     {
         $token = implode('.', $this->payload);
+        $signature = $this->signature->signature();
 
-        if ($this->signature === null) {
+        if ($signature === null) {
             $token .= '.';
         }
         return $token;
