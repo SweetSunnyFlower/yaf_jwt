@@ -1,7 +1,6 @@
 <?php
 
-interface Jwt_Interface_ValidationSource
-{
+interface Jwt_Interface_ValidationSource {
     public function setId($id);
 
     public function setIssuer($issuer);

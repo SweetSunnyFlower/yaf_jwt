@@ -1,6 +1,6 @@
 <?php
 
-interface Jwt_Interface_Claim{
+interface Jwt_Interface_Claim {
 
     public function __construct($name, $value);
 

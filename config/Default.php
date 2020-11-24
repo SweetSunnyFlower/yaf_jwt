@@ -1,6 +1,6 @@
 <?php
 
-class Jwt_Config_Default implements Jwt_Interface_Config{
+class Jwt_Config_Default implements Jwt_Interface_Config {
 
     /**
      * @desc 签发人
@@ -43,14 +43,22 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
     /**
      * Jwt_Config_Default constructor.
      * @param $secretKey
-     * @param null $issued
-     * @param null $audience
-     * @param int $issuedAt
-     * @param int $effectAt
-     * @param int $expiresAt
-     * @param null $identifiedBy
+     * @param  null  $issued  签发人
+     * @param  null  $audience  受众
+     * @param  int  $issuedAt  签发时间
+     * @param  int  $effectAt  生效时间
+     * @param  int  $expiresAt  过期时间
+     * @param  null  $identifiedBy
      */
-    public function __construct($secretKey, $issued = null, $audience = null, $issuedAt = 0, $effectAt = 0, $expiresAt = 0, $identifiedBy = null){
+    public function __construct(
+        $secretKey,
+        $issued = null,
+        $audience = null,
+        $issuedAt = 0,
+        $effectAt = 0,
+        $expiresAt = 0,
+        $identifiedBy = null
+    ) {
         $this->setSecretKey($secretKey)
             ->setIssued($issued)
             ->setAudience($audience)
@@ -65,8 +73,9 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $issued
      * @return $this
      */
-    public function setIssued($issued){
+    public function setIssued($issued) {
         $this->issued = $issued;
+
         return $this;
     }
 
@@ -75,8 +84,9 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $audience
      * @return $this
      */
-    public function setAudience($audience){
+    public function setAudience($audience) {
         $this->audience = $audience;
+
         return $this;
     }
 
@@ -85,8 +95,9 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $issuedAt
      * @return $this
      */
-    public function setIssuedAt($issuedAt = 0){
+    public function setIssuedAt($issuedAt = 0) {
         $this->issuedAt = $issuedAt ? $issuedAt : time();
+
         return $this;
     }
 
@@ -95,18 +106,20 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $effectAt
      * @return $this
      */
-    public function setEffectAt($effectAt = 0){
+    public function setEffectAt($effectAt = 0) {
         $this->effectAt = $effectAt;
+
         return $this;
     }
 
     /**
      * @desc 设置生效时间
-     * @param int $expiresAt
+     * @param  int  $expiresAt
      * @return $this
      */
-    public function setExpiresAt($expiresAt = 0){
+    public function setExpiresAt($expiresAt = 0) {
         $this->expiresAt = $expiresAt;
+
         return $this;
     }
 
@@ -115,8 +128,9 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $identifiedBy
      * @return $this
      */
-    public function setIdentifiedBy($identifiedBy){
+    public function setIdentifiedBy($identifiedBy) {
         $this->identifiedBy = $identifiedBy;
+
         return $this;
     }
 
@@ -124,59 +138,58 @@ class Jwt_Config_Default implements Jwt_Interface_Config{
      * @param $secretKey
      * @return $this|mixed
      */
-    public function setSecretKey($secretKey)
-    {
+    public function setSecretKey($secretKey) {
         $this->secretKey = new Jwt_Signer_Key($secretKey);
+
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getIssued(){
+    public function getIssued() {
         return $this->issued;
     }
 
     /**
      * @return string
      */
-    public function getAudience(){
+    public function getAudience() {
         return $this->audience;
     }
 
     /**
      * @return int
      */
-    public function getIssuedAt(){
+    public function getIssuedAt() {
         return $this->issuedAt;
     }
 
     /**
      * @return int
      */
-    public function getEffectAt(){
+    public function getEffectAt() {
         return $this->effectAt;
     }
 
     /**
      * @return int
      */
-    public function getExpiresAt(){
+    public function getExpiresAt() {
         return $this->expiresAt;
     }
 
     /**
      * @return string
      */
-    public function getIdentifiedBy(){
+    public function getIdentifiedBy() {
         return $this->identifiedBy;
     }
 
     /**
      * @return mixed
      */
-    public function getSecretKey()
-    {
+    public function getSecretKey() {
         return $this->secretKey;
     }
 }

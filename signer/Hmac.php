@@ -11,21 +11,18 @@
  * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
  * @since 0.1.0
  */
-abstract class Jwt_Signer_Hmac extends Jwt_Signer_BaseSigner
-{
+abstract class Jwt_Signer_Hmac extends Jwt_Signer_BaseSigner {
     /**
      * {@inheritdoc}
      */
-    public function createHash($payload, Jwt_Signer_Key $key)
-    {
+    public function createHash($payload, Jwt_Signer_Key $key) {
         return hash_hmac($this->getAlgorithm(), $payload, $key->getContent(), true);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function doVerify($expected, $payload, Jwt_Signer_Key $key)
-    {
+    public function doVerify($expected, $payload, Jwt_Signer_Key $key) {
         if (!is_string($expected)) {
             return false;
         }
@@ -38,15 +35,14 @@ abstract class Jwt_Signer_Hmac extends Jwt_Signer_BaseSigner
     /**
      * PHP < 5.6 timing attack safe hash comparison
      *
-     * @internal
-     *
-     * @param string $expected
-     * @param string $generated
+     * @param  string  $expected
+     * @param  string  $generated
      *
      * @return boolean
+     * @internal
+     *
      */
-    public function hashEquals($expected, $generated)
-    {
+    public function hashEquals($expected, $generated) {
         $expectedLength = strlen($expected);
 
         if ($expectedLength !== strlen($generated)) {
@@ -65,9 +61,9 @@ abstract class Jwt_Signer_Hmac extends Jwt_Signer_BaseSigner
     /**
      * Returns the algorithm name
      *
+     * @return string
      * @internal
      *
-     * @return string
      */
     abstract public function getAlgorithm();
 }

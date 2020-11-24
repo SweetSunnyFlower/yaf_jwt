@@ -1,7 +1,6 @@
 <?php
 
-class Jwt_Token
-{
+class Jwt_Token {
     private $headers;
 
     private $claims;
@@ -10,28 +9,35 @@ class Jwt_Token
 
     private $payload;
 
+    /**
+     * Jwt_Token constructor.
+     * @param  array|string[]  $headers
+     * @param  array  $claims
+     * @param  Jwt_Signer_Signature|null  $signature
+     * @param  array|string[]  $payload
+     */
     public function __construct(
         array $headers = array('alg' => 'none'),
         array $claims = array(),
         Jwt_Signer_Signature $signature = null,
         array $payload = array('', '')
-    ){
+    ) {
         $this->headers = $headers;
         $this->claims = $claims;
         $this->signature = $signature;
         $this->payload = $payload;
     }
 
-    public function getHeaders(){
+    public function getHeaders() {
         return $this->headers;
     }
 
-    public function hasHeader($name){
+    public function hasHeader($name) {
         return array_key_exists($name, $this->headers);
     }
 
-    public function getHeader($name, $default = null){
-        if ($this->hasHeader($name)){
+    public function getHeader($name, $default = null) {
+        if ($this->hasHeader($name)) {
             return $this->getHeaderValue($name);
         }
 
@@ -42,8 +48,7 @@ class Jwt_Token
         return $default;
     }
 
-    private function getHeaderValue($name)
-    {
+    private function getHeaderValue($name) {
         $header = $this->headers[$name];
 
         if ($header instanceof Jwt_Interface_Claim) {
@@ -53,18 +58,15 @@ class Jwt_Token
         return $header;
     }
 
-    public function getClaims()
-    {
+    public function getClaims() {
         return $this->claims;
     }
 
-    public function hasClaim($name)
-    {
+    public function hasClaim($name) {
         return array_key_exists($name, $this->claims);
     }
 
-    public function getClaim($name, $default = null)
-    {
+    public function getClaim($name, $default = null) {
         if ($this->hasClaim($name)) {
             return $this->claims[$name]->getValue();
         }
@@ -76,8 +78,7 @@ class Jwt_Token
         return $default;
     }
 
-    public function verify(Jwt_Interface_Signer $signer, $key)
-    {
+    public function verify(Jwt_Interface_Signer $signer, $key) {
         if ($this->signature === null) {
             throw new BadMethodCallException('This token is not signed');
         }
@@ -89,13 +90,11 @@ class Jwt_Token
         return $this->signature->verify($signer, $this->getPayload(), $key);
     }
 
-    public function getPayload()
-    {
-        return $this->payload[0] . '.' . $this->payload[1];
+    public function getPayload() {
+        return $this->payload[0].'.'.$this->payload[1];
     }
 
-    public function validate(Jwt_ValidationSource $source)
-    {
+    public function validate(Jwt_ValidationSource $source) {
         foreach ($this->getValidatableClaims() as $claim) {
             if (!$claim->validate($source)) {
                 return false;
@@ -105,8 +104,7 @@ class Jwt_Token
         return true;
     }
 
-    public function isExpired(DateTimeInterface $now = null)
-    {
+    public function isExpired(DateTimeInterface $now = null) {
         $exp = $this->getClaim('exp', false);
 
         if ($exp === false) {
@@ -121,8 +119,7 @@ class Jwt_Token
         return $now > $expiresAt;
     }
 
-    private function getValidatableClaims()
-    {
+    private function getValidatableClaims() {
         foreach ($this->claims as $claim) {
             if ($claim instanceof Jwt_Interface_Validatable) {
                 yield $claim;
@@ -130,24 +127,24 @@ class Jwt_Token
         }
     }
 
-    public function getToken()
-    {
+    public function getToken() {
         $token = implode('.', $this->payload);
         $signature = $this->signature->signature();
 
         if ($signature === null) {
             $token .= '.';
         }
+
         return $token;
     }
 
-    public function __toString()
-    {
+    public function __toString() {
         $token = implode('.', $this->payload);
 
         if ($this->signature === null) {
             $token .= '.';
         }
+
         return $token;
     }
 }

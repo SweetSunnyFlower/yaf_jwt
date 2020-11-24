@@ -11,10 +11,8 @@
  * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
  * @since 2.1.0
  */
-abstract class Jwt_Signer_Rsa extends Jwt_Signer_OpenSSL
-{
-    final public function getKeyType()
-    {
+abstract class Jwt_Signer_Rsa extends Jwt_Signer_OpenSSL {
+    final public function getKeyType() {
         return OPENSSL_KEYTYPE_RSA;
     }
 }

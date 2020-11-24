@@ -5,21 +5,18 @@
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  */
 
-class Jwt_Signer_Hmac_Sha384 extends Jwt_Signer_Hmac
-{
+class Jwt_Signer_Hmac_Sha384 extends Jwt_Signer_Hmac {
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmId()
-    {
+    public function getAlgorithmId() {
         return 'HS384';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithm()
-    {
+    public function getAlgorithm() {
         return 'sha384';
     }
 }

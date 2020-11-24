@@ -12,21 +12,18 @@
  * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
  * @since 2.1.0
  */
-class Jwt_Signer_Rsa_Sha256 extends Jwt_Signer_Rsa
-{
+class Jwt_Signer_Rsa_Sha256 extends Jwt_Signer_Rsa {
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmId()
-    {
+    public function getAlgorithmId() {
         return 'RS256';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithm()
-    {
+    public function getAlgorithm() {
         return OPENSSL_ALGO_SHA256;
     }
 }

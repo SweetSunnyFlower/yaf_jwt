@@ -12,29 +12,25 @@
  * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
  * @since 2.1.0
  */
-class Jwt_Signer_Ecdsa_Sha512 extends Jwt_Signer_Ecdsa
-{
+class Jwt_Signer_Ecdsa_Sha512 extends Jwt_Signer_Ecdsa {
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmId()
-    {
+    public function getAlgorithmId() {
         return 'ES512';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithm()
-    {
+    public function getAlgorithm() {
         return 'sha512';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getKeyLength()
-    {
+    public function getKeyLength() {
         return 132;
     }
 }

@@ -11,21 +11,18 @@
  * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
  * @since 0.1.0
  */
-class Jwt_Signer_Hmac_Sha512 extends Jwt_Signer_Hmac
-{
+class Jwt_Signer_Hmac_Sha512 extends Jwt_Signer_Hmac {
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithmId()
-    {
+    public function getAlgorithmId() {
         return 'HS512';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAlgorithm()
-    {
+    public function getAlgorithm() {
         return 'sha512';
     }
 }

@@ -1,12 +1,10 @@
 <?php
 
-class Jwt_Claim_Factory implements Jwt_Interface_ClaimFactory
-{
+class Jwt_Claim_Factory implements Jwt_Interface_ClaimFactory {
 
     private $callbacks = array();
 
-    public function __construct(array $callbacks = array())
-    {
+    public function __construct(array $callbacks = array()) {
         $this->callbacks = array_merge(
             array(
                 'iat' => 'Jwt_Claim_LesserOrEqualsTo',
@@ -21,9 +19,8 @@ class Jwt_Claim_Factory implements Jwt_Interface_ClaimFactory
         );
     }
 
-    public function create($name, $value)
-    {
-        if (!empty($this->callbacks[$name])){
+    public function create($name, $value) {
+        if (!empty($this->callbacks[$name])) {
             return (new $this->callbacks[$name]($name, $value))->getValue();
         }
 

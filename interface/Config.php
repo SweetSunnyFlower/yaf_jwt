@@ -1,7 +1,6 @@
 <?php
 
-interface Jwt_Interface_Config
-{
+interface Jwt_Interface_Config {
     /**
      * @desc 设置签发人
      * @return $this
@@ -39,7 +38,7 @@ interface Jwt_Interface_Config
     public function setIdentifiedBy($identifiedBy);
 
     /**
-     * @param Jwt_Signer_Key $key
+     * @param  Jwt_Signer_Key  $key
      * @return mixed
      */
     public function setSecretKey($secretKey);

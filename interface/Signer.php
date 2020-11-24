@@ -1,7 +1,6 @@
 <?php
 
-interface Jwt_Interface_Signer
-{
+interface Jwt_Interface_Signer {
     public function getAlgorithmId();
 
     public function modifyHeader(array &$headers);

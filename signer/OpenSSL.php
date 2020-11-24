@@ -1,17 +1,15 @@
 <?php
 
-abstract class Jwt_Signer_OpenSSL extends Jwt_Signer_BaseSigner
-{
-    public function createHash($payload, Jwt_Signer_Key $key)
-    {
+abstract class Jwt_Signer_OpenSSL extends Jwt_Signer_BaseSigner {
+    public function createHash($payload, Jwt_Signer_Key $key) {
         $privateKey = $this->getPrivateKey($key->getContent(), $key->getPassphrase());
 
         try {
             $signature = '';
 
-            if (! openssl_sign($payload, $signature, $privateKey, $this->getAlgorithm())) {
+            if (!openssl_sign($payload, $signature, $privateKey, $this->getAlgorithm())) {
                 throw new InvalidArgumentException(
-                    'There was an error while creating the signature: ' . openssl_error_string()
+                    'There was an error while creating the signature: '.openssl_error_string()
                 );
             }
 
@@ -22,13 +20,12 @@ abstract class Jwt_Signer_OpenSSL extends Jwt_Signer_BaseSigner
     }
 
     /**
-     * @param string $pem
-     * @param string $passphrase
+     * @param  string  $pem
+     * @param  string  $passphrase
      *
      * @return resource
      */
-    private function getPrivateKey($pem, $passphrase)
-    {
+    private function getPrivateKey($pem, $passphrase) {
         $privateKey = openssl_pkey_get_private($pem, $passphrase);
         $this->validateKey($privateKey);
 
@@ -41,22 +38,20 @@ abstract class Jwt_Signer_OpenSSL extends Jwt_Signer_BaseSigner
      * @param $pem
      * @return bool
      */
-    public function doVerify($expected, $payload, Jwt_Signer_Key $key)
-    {
+    public function doVerify($expected, $payload, Jwt_Signer_Key $key) {
         $publicKey = $this->getPublicKey($key->getContent());
-        $result    = openssl_verify($payload, $expected, $publicKey, $this->getAlgorithm());
+        $result = openssl_verify($payload, $expected, $publicKey, $this->getAlgorithm());
         openssl_free_key($publicKey);
 
         return $result === 1;
     }
 
     /**
-     * @param string $pem
+     * @param  string  $pem
      *
      * @return resource
      */
-    private function getPublicKey($pem)
-    {
+    private function getPublicKey($pem) {
         $publicKey = openssl_pkey_get_public($pem);
         $this->validateKey($publicKey);
 
@@ -66,21 +61,20 @@ abstract class Jwt_Signer_OpenSSL extends Jwt_Signer_BaseSigner
     /**
      * Raises an exception when the key type is not the expected type
      *
-     * @param resource|bool $key
+     * @param  resource|bool  $key
      *
      * @throws InvalidArgumentException
      */
-    private function validateKey($key)
-    {
-        if (! is_resource($key)) {
+    private function validateKey($key) {
+        if (!is_resource($key)) {
             throw new InvalidArgumentException(
-                'It was not possible to parse your key, reason: ' . openssl_error_string()
+                'It was not possible to parse your key, reason: '.openssl_error_string()
             );
         }
 
         $details = openssl_pkey_get_details($key);
 
-        if (! isset($details['key']) || $details['type'] !== $this->getKeyType()) {
+        if (!isset($details['key']) || $details['type'] !== $this->getKeyType()) {
             throw new InvalidArgumentException('This key is not compatible with this signer');
         }
     }

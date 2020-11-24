@@ -8,6 +8,7 @@
 
 use Lcobucci\JWT\Signer\Ecdsa\MultibyteStringConverter;
 use Lcobucci\JWT\Signer\Ecdsa\SignatureConverter;
+
 use const OPENSSL_KEYTYPE_EC;
 
 /**
@@ -16,23 +17,20 @@ use const OPENSSL_KEYTYPE_EC;
  * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
  * @since 2.1.0
  */
-abstract class Jwt_Signer_Ecdsa extends Jwt_Signer_OpenSSL
-{
+abstract class Jwt_Signer_Ecdsa extends Jwt_Signer_OpenSSL {
     /**
      * @var SignatureConverter
      */
     private $converter;
 
-    public function __construct(SignatureConverter $converter = null)
-    {
+    public function __construct(SignatureConverter $converter = null) {
         $this->converter = $converter ?: new MultibyteStringConverter();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createHash($payload, Jwt_Signer_Key $key)
-    {
+    public function createHash($payload, Jwt_Signer_Key $key) {
         return $this->converter->fromAsn1(
             parent::createHash($payload, $key),
             $this->getKeyLength()
@@ -42,8 +40,7 @@ abstract class Jwt_Signer_Ecdsa extends Jwt_Signer_OpenSSL
     /**
      * {@inheritdoc}
      */
-    public function doVerify($expected, $payload, Jwt_Signer_Key $key)
-    {
+    public function doVerify($expected, $payload, Jwt_Signer_Key $key) {
         return parent::doVerify(
             $this->converter->toAsn1($expected, $this->getKeyLength()),
             $payload,
@@ -61,8 +58,7 @@ abstract class Jwt_Signer_Ecdsa extends Jwt_Signer_OpenSSL
     /**
      * {@inheritdoc}
      */
-    final public function getKeyType()
-    {
+    final public function getKeyType() {
         return OPENSSL_KEYTYPE_EC;
     }
 }

@@ -4,8 +4,7 @@
  * Class Jwt_Factory
  * @desc 签名入口
  */
-class Jwt_Factory
-{
+class Jwt_Factory {
 
     private $encoder;
 
@@ -17,62 +16,134 @@ class Jwt_Factory
 
     private $claims = array();
 
-    private $headers = array('typ'=> 'JWT', 'alg' => 'none');
+    private $headers = array('typ' => 'JWT', 'alg' => 'none');
 
-    public function __construct(Jwt_Interface_Encode $encode, Jwt_Interface_ClaimFactory $claimFactory, Jwt_Interface_Config $config, Jwt_Interface_Signer $signer){
-        $this->config = $config;
-        $this->encoder = $encode;
-        $this->claimFactory = $claimFactory;
-        $this->signer = $signer;
+    public function __construct(
+        Jwt_Interface_Config $config
+    ) {
+        $this->setClaimFactory();
+        $this->setEncoder();
+        $this->setSignature();
+        $this->setConfig($config);
     }
 
-    public static function register($secretKey = '', $claims = array()){
-        $self =  new self(new Jwt_Parsing_Encoder(),new Jwt_Claim_Factory(),new Jwt_Config_Default($secretKey, 'baidu.com', 'ccapp', time(), 0, time() + 3600, 1), new Jwt_Signer_Hmac_Sha256());
-        return $self->issuedBy()->audienceFor()->canOnlyBeUsedAfter()->expiresAt()->identifiedBy()->withMultiClaim($claims);
+    /**
+     * @param  Jwt_Interface_Config  $config
+     * @return $this
+     */
+    public function setConfig(Jwt_Interface_Config $config) {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    /**
+     * @param  Jwt_Interface_Config  $config
+     * @param  array  $claim
+     * @return Jwt_Factory
+     */
+    public static function register(Jwt_Interface_Config $config, $claim = array()) {
+        $self = new self($config);
+
+        return $self->issuedBy()->audienceFor()->canOnlyBeUsedAfter()->expiresAt()->identifiedBy()->withMultiClaim(
+            $claim
+        );
+    }
+
+    /**
+     * @param  Jwt_Interface_Encode|null  $encoder
+     * @return $this
+     */
+    public function setEncoder(Jwt_Interface_Encode $encoder = null) {
+        if (null === $encoder) {
+            $this->encoder = new Jwt_Parsing_Encoder();
+        } else {
+            $this->encoder = $encoder;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  Jwt_Interface_ClaimFactory|null  $claimFactory
+     * @return $this
+     */
+    public function setClaimFactory(Jwt_Interface_ClaimFactory $claimFactory = null) {
+        if (null === $claimFactory) {
+            $this->claimFactory = new Jwt_Claim_Factory();
+        } else {
+            $this->claimFactory = $claimFactory;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param  Jwt_Interface_Signer|null  $signer
+     * @return $this|Jwt_Signer_Hmac_Sha256
+     */
+    public function setSignature(Jwt_Interface_Signer $signer = null) {
+        if (null === $signer) {
+            return $this->signer = new Jwt_Signer_Hmac_Sha256();
+        } else {
+            $this->signer = $signer;
+        }
+
+        return $this;
     }
 
     /**
      * @desc 签发人
-     * @param false $replicateAsHeader
+     * @param  false  $replicateAsHeader
      * @return $this
      */
-    public function issuedBy($replicateAsHeader = false)
-    {
-        return $this->setRegisteredClaim('iss', (string) $this->config->getIssued(), $replicateAsHeader);
+    public function issuedBy($replicateAsHeader = false) {
+        return $this->setRegisteredClaim('iss', (string)$this->config->getIssued(), $replicateAsHeader);
     }
 
     /**
      * @desc 受众
-     * @param false $replicateAsHeader
+     * @param  false  $replicateAsHeader
      * @return $this
      */
-    public function audienceFor($replicateAsHeader = false)
-    {
-        return $this->setRegisteredClaim('aud', (string) $this->config->getAudience(), $replicateAsHeader);
+    public function audienceFor($replicateAsHeader = false) {
+        return $this->setRegisteredClaim('aud', (string)$this->config->getAudience(), $replicateAsHeader);
     }
 
-    public function identifiedBy($replicateAsHeader = false)
-    {
-        return $this->setRegisteredClaim('jti', (string) $this->config->getIdentifiedBy(), $replicateAsHeader);
+    public function identifiedBy($replicateAsHeader = false) {
+        return $this->setRegisteredClaim('jti', (string)$this->config->getIdentifiedBy(), $replicateAsHeader);
     }
 
-    public function issuedAt($replicateAsHeader = false)
-    {
-        return $this->setRegisteredClaim('iat', (int) $this->config->getIssuedAt(), $replicateAsHeader);
+    public function issuedAt($replicateAsHeader = false) {
+        return $this->setRegisteredClaim('iat', (int)$this->config->getIssuedAt(), $replicateAsHeader);
     }
 
-    public function canOnlyBeUsedAfter($replicateAsHeader = false)
-    {
-        return $this->setRegisteredClaim('nbf', (int) $this->config->getEffectAt(), $replicateAsHeader);
+    /**
+     * 生效时间
+     * @param  false  $replicateAsHeader
+     * @return $this
+     */
+    public function canOnlyBeUsedAfter($replicateAsHeader = false) {
+        return $this->setRegisteredClaim('nbf', (int)$this->config->getEffectAt(), $replicateAsHeader);
     }
 
-    public function expiresAt($replicateAsHeader = false)
-    {
-        return $this->setRegisteredClaim('exp', (int) $this->config->getExpiresAt(), $replicateAsHeader);
+    /**
+     * 过期时间
+     * @param  false  $replicateAsHeader
+     * @return $this
+     */
+    public function expiresAt($replicateAsHeader = false) {
+        return $this->setRegisteredClaim('exp', (int)$this->config->getExpiresAt(), $replicateAsHeader);
     }
 
-    protected function setRegisteredClaim($name, $value, $replicate)
-    {
+    /**
+     * 添加附加数据
+     * @param $name
+     * @param $value
+     * @param $replicate
+     * @return $this
+     */
+    protected function setRegisteredClaim($name, $value, $replicate) {
         $this->withClaim($name, $value);
 
         if ($replicate) {
@@ -82,22 +153,21 @@ class Jwt_Factory
         return $this;
     }
 
-    public function withClaim($name, $value)
-    {
-        $this->claims[(string) $name] = $this->claimFactory->create($name, $value);
+    public function withClaim($name, $value) {
+        $this->claims[(string)$name] = $this->claimFactory->create($name, $value);
 
         return $this;
     }
 
-    public function withMultiClaim($claims = array())
-    {
-        foreach ($claims as $name => $value){
-            $this->claims[(string) $name] = $this->claimFactory->create($name, $value);
+    public function withMultiClaim($claims = array()) {
+        foreach ($claims as $name => $value) {
+            $this->claims[(string)$name] = $this->claimFactory->create($name, $value);
         }
+
         return $this;
     }
 
-    public function token(){
+    public function token() {
         $this->signer->modifyHeader($this->headers);
         $payload = array(
             $this->encoder->base64UrlEncode($this->encoder->jsonEncode($this->headers)),
@@ -105,19 +175,26 @@ class Jwt_Factory
         );
 
         $signature = $this->createSignature($payload);
-        if ($signature !== null){
+        if ($signature !== null) {
             $payload[] = $this->encoder->base64UrlEncode($signature);
         }
 
         return new Jwt_Token($this->headers, $this->claims, $signature, $payload);
     }
 
-    public function createSignature(array $payload){
-        if ($this->signer === null || $this->config->getSecretKey() === null){
+    public function createSignature(array $payload) {
+        if ($this->signer === null || $this->config->getSecretKey() === null) {
             return null;
         }
 
         return $this->signer->sign(implode('.', $payload), $this->config->getSecretKey());
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken() {
+        return $this->token()->getToken();
     }
 
 }

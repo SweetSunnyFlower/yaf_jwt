@@ -6,30 +6,27 @@
  */
 
 
-class Jwt_Signer_Keychain
-{
+class Jwt_Signer_Keychain {
     /**
      * Returns a private key from file path or content
      *
-     * @param string $key
-     * @param string $passphrase
+     * @param  string  $key
+     * @param  string  $passphrase
      *
      * @return Jwt_Signer_Key
      */
-    public function getPrivateKey($key, $passphrase = null)
-    {
+    public function getPrivateKey($key, $passphrase = null) {
         return new Jwt_Signer_Key($key, $passphrase);
     }
 
     /**
      * Returns a public key from file path or content
      *
-     * @param string $certificate
+     * @param  string  $certificate
      *
      * @return Jwt_Signer_Key
      */
-    public function getPublicKey($certificate)
-    {
+    public function getPublicKey($certificate) {
         return new Jwt_Signer_Key($certificate);
     }
 }
